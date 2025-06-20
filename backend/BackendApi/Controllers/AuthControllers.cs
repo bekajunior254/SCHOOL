@@ -4,8 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BackendApi.Models; // or wherever AppUser is
-using BackendApi.DTOs;   // assuming you placed RegisterDto/LoginDto in DTOs folder
+using BackendApi.Models;
+using BackendApi.DTOs;   
 
 [ApiController]
 [Route("api/[controller]")]

@@ -32,7 +32,13 @@ public class AuthController : ControllerBase
         var result = await _userManager.CreateAsync(user, dto.Password);
 
         if (!result.Succeeded)
-            return BadRequest(result.Errors);
+        {
+            return BadRequest(new
+            {
+                message = "Registration failed",
+                errors = result.Errors.Select(e => e.Description)
+            });
+        }
 
         return Ok("User registered successfully. An admin will assign a role.");
     }

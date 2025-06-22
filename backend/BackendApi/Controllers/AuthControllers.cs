@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using BackendApi.Models;
-using BackendApi.DTOs;   
+using BackendApi.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -46,23 +46,26 @@ public class AuthController : ControllerBase
 
         var roles = await _userManager.GetRolesAsync(user);
         var role = roles.FirstOrDefault();
-      // Ensure role is assigned
+
         if (string.IsNullOrEmpty(role))
             return Forbid("User has no assigned role. Contact admin.");
+
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Name, user.UserName ?? throw new Exception("Username is null")),
             new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Role, role)
         };
 
-        if (!string.IsNullOrEmpty(role))
-            claims.Add(new Claim(ClaimTypes.Role, role));
+        var jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT key not found in configuration.");
+        var jwtIssuer = _config["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT issuer not found in configuration.");
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
+            issuer: jwtIssuer,
+            audience: null,
             claims: claims,
             expires: DateTime.UtcNow.AddHours(3),
             signingCredentials: creds

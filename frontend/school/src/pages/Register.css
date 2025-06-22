@@ -1,0 +1,104 @@
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  font-family: Arial, sans-serif;
+}
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+}
+
+.register-form {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 320px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.register-form h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.register-form label {
+  margin-top: 0.4rem;
+  display: block;
+  font-weight: bold;
+  color: #333;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 4px;
+  color: #333;
+  margin-bottom: 1rem;
+box-shadow: inset 0 0 0 1000px white ;
+  -webkit-text-fill-color: #333;
+  
+}
+
+/* Password input layout with icon on the right */
+.password-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.password-row input {
+  flex: 1;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+}
+
+.toggle-icon {
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: #007bff;
+  padding-top: 4px;
+}
+
+.register-form button {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.register-form button:hover {
+  background-color: #0056b3;
+}
+
+.register-form p {
+  margin-top: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+.register-form a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}

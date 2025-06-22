@@ -46,7 +46,9 @@ public class AuthController : ControllerBase
 
         var roles = await _userManager.GetRolesAsync(user);
         var role = roles.FirstOrDefault();
-
+      // Ensure role is assigned
+        if (string.IsNullOrEmpty(role))
+            return Forbid("User has no assigned role. Contact admin.");
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.UserName),

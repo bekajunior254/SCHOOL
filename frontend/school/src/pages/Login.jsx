@@ -11,25 +11,47 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(""); 
 
     try {
       const res = await axios.post("https://localhost:5001/api/auth/login", {
         username,
-        password
+        password,
       });
 
+      
+      console.log("Login response:", res.data);
+
+      // Store token & user info
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
       localStorage.setItem("username", res.data.username);
 
-      // Redirect by role
+      // Navigate based on role
       const role = res.data.role;
-      if (role === "Admin") navigate("/admin");
-      else if (role === "Teacher") navigate("/teacher");
-      else if (role === "Student") navigate("/student");
-      else if (role === "Parent") navigate("/parent");
+      switch (role) {
+        case "Admin":
+          navigate("/admin");
+          break;
+        case "Teacher":
+          navigate("/teacher");
+          break;
+        case "Student":
+          navigate("/student");
+          break;
+        case "Parent":
+          navigate("/parent");
+          break;
+        default:
+          setError("No dashboard available for this role");
+      }
     } catch (err) {
-      setError("Invalid username or password");
+      console.error("Login error:", err?.response || err);
+      if (err?.response?.status === 403) {
+        setError("No role assigned. Contact admin.");
+      } else {
+        setError("Invalid username or password");
+      }
     }
   };
 

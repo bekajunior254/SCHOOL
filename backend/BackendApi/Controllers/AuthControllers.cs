@@ -54,7 +54,7 @@ public class AuthController : ControllerBase
         var role = roles.FirstOrDefault();
 
         if (string.IsNullOrEmpty(role))
-            return Forbid("User has no assigned role. Contact admin.");
+           return StatusCode(403, "User has no assigned role. Contact admin.");
 
         var claims = new List<Claim>
         {

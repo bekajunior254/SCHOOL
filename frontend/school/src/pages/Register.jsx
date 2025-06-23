@@ -1,12 +1,13 @@
 import "./Register.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate  } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,7 +21,8 @@ export default function Register() {
     e.preventDefault();
     try {
       await axios.post("http://localhost:5000/api/auth/register", form);
-      alert("Registration successful!");
+      alert("Registration successful!"); 
+      navigate("/login"); 
     } catch (error) {
       alert("Registration failed.");
     }

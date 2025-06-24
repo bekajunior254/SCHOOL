@@ -50,18 +50,18 @@ public class AuthController : ControllerBase
         if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
             return Unauthorized("Invalid credentials");
 
-        var roles = await _userManager.GetRolesAsync(user);
-        var role = roles.FirstOrDefault();
+        // var roles = await _userManager.GetRolesAsync(user);
+        //var role = roles.FirstOrDefault();
 
-        if (string.IsNullOrEmpty(role))
-           return StatusCode(403, "User has no assigned role. Contact admin.");
+        //if (string.IsNullOrEmpty(role))
+        // return StatusCode(403, "User has no assigned role. Contact admin.");//
 
         var claims = new List<Claim>
-        {
+       {
             new Claim(ClaimTypes.Name, user.UserName ?? throw new Exception("Username is null")),
             new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Role, role)
-        };
+         //   new Claim(ClaimTypes.Role, role)
+       };
 
         var jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT key not found in configuration.");
         var jwtIssuer = _config["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT issuer not found in configuration.");
@@ -81,7 +81,28 @@ public class AuthController : ControllerBase
         {
             token = new JwtSecurityTokenHandler().WriteToken(token),
             username = user.UserName,
-            role = role
+            //  role = role
         });
+    }
+
+
+    [HttpPost("assign-role")]
+    public async Task<IActionResult> AssignRole([FromBody] RoleAssignmentDto dto)
+    {
+        var user = await _userManager.FindByNameAsync(dto.Username);
+        if (user == null)
+            return NotFound("User not found");
+
+        var result = await _userManager.AddToRoleAsync(user, dto.Role);
+        if (!result.Succeeded)
+        {
+            return BadRequest(new
+            {
+                message = "Role assignment failed",
+                errors = result.Errors.Select(e => e.Description)
+            });
+        }
+
+        return Ok($"Role '{dto.Role}' assigned to user '{dto.Username}'");
     }
 }

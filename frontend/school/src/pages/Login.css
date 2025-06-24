@@ -11,7 +11,7 @@ body, html, #root {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f2f2f2;
+  background-color: white; /* Page background */
 }
 
 .login-form {
@@ -19,7 +19,7 @@ body, html, #root {
   padding: 2rem;
   border-radius: 8px;
   width: 320px;
-  box-shadow: 0 0 12px rgba(247, 245, 245, 0.986);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   color: #333;
 }
 
@@ -34,10 +34,10 @@ body, html, #root {
   display: block;
 }
 
-.login-form input {
+.login-form input[type="text"],
+.login-form input[type="password"] {
   width: 100%;
   padding: 0.6rem;
-  margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
@@ -45,21 +45,44 @@ body, html, #root {
   color: #333;
 }
 
-.password-input-wrapper {
-  position: relative;
+.password-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
 }
 
-.password-input-wrapper input {
-  padding-right: 2.5rem;
+.password-wrapper input {
+  flex: 1;
 }
 
 .toggle-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
+  margin-left: 10px;
+  font-size: 1.2rem;
   color: #555;
+  cursor: pointer;
+}
+
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  gap: 0.3rem;
+}
+
+.forgot-link {
+  display: block;
+  margin-top: -0.3rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #007bff;
+  text-decoration: none;
 }
 
 .login-form button {

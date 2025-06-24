@@ -46,34 +46,8 @@ body, html, #root {
   border-radius: 4px;
   color: #333;
   margin-bottom: 1rem;
-box-shadow: inset 0 0 0 1000px white ;
+  box-shadow: inset 0 0 0 1000px white;
   -webkit-text-fill-color: #333;
-  
-}
-
-/* Password input layout with icon on the right */
-.password-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.password-row input {
-  flex: 1;
-  padding: 0.6rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  color: #333;
-}
-
-.toggle-icon {
-  cursor: pointer;
-  font-size: 1.3rem;
-  color: #007bff;
-  padding-top: 4px;
 }
 
 .register-form button {

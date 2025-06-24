@@ -11,6 +11,7 @@ body, html, #root {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: #f2f2f2;
 }
 
 .login-form {
@@ -18,7 +19,7 @@ body, html, #root {
   padding: 2rem;
   border-radius: 8px;
   width: 320px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 12px rgba(247, 245, 245, 0.986);
   color: #333;
 }
 

@@ -9,7 +9,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//  CORS configuration
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -18,31 +18,30 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
-              
     });
 });
 
-//  DB Context
+// DB Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//  Identity setup
+// Identity
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-//  JWT setup
+// JWT
 var jwtKey = builder.Configuration["Jwt:Key"]
-?? throw new InvalidOperationException("JWT key is missing from configuration.");
-;
+    ?? throw new InvalidOperationException("JWT key is missing from configuration.");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]
-?? throw new InvalidOperationException("JWT issuer is missing from configuration.");
-;
+    ?? throw new InvalidOperationException("JWT issuer is missing from configuration.");
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+})
+.AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
@@ -57,7 +56,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//  Swagger with JWT auth
+// Swagger + JWT support
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -90,19 +89,56 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-//  Use CORS before anything that handles requests
+// ===== ROLE AND ADMIN SEEDING =====
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+    // Seed roles
+    string[] roles = { "Admin", "Teacher", "Student", "Parent" };
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    // Seed a default admin (optional but useful)
+    string adminEmail = "admin@system.com";
+    string adminUsername = "admin";
+    string adminPassword = "Admin@123"; // You can replace this later or hash from env
+
+    var existingAdmin = await userManager.FindByNameAsync(adminUsername);
+    if (existingAdmin == null)
+    {
+        var adminUser = new AppUser
+        {
+            UserName = adminUsername,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}
+
+// Middlewares
 app.UseCors("AllowReactApp");
 
-//  Swagger middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
-//  Auth middlewares
 app.UseAuthentication();
 app.UseAuthorization();
 

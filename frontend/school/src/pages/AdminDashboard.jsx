@@ -10,6 +10,7 @@ export default function AdminDashboard() {
       <h1>Welcome, Admin</h1>
 
       <div className="admin-actions">
+        <button onClick={() => navigate("/admin/assign-role")}>Assign Role & Identifier</button>
         <button onClick={() => navigate("/admin/manage-users")}>Manage Users</button>
         <button onClick={() => navigate("/admin/manage-students")}>Manage Students</button>
         <button onClick={() => navigate("/admin/manage-teachers")}>Manage Teachers</button>

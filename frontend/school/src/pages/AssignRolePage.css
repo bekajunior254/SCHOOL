@@ -1,0 +1,41 @@
+.assign-role-container {
+  max-width: 450px;
+  margin: 50px auto;
+  background: #f0f0f0;
+  padding: 20px 30px;
+  border-radius: 8px;
+}
+
+.assign-role-form label {
+  display: block;
+  margin-top: 15px;
+}
+
+.assign-role-form input,
+.assign-role-form select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.assign-role-form button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.assign-role-form button:hover {
+  background: #0056b3;
+}
+
+.status-message {
+  margin-top: 15px;
+  font-weight: bold;
+}

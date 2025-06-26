@@ -25,8 +25,12 @@ public class AuthController : ControllerBase
     {
         var user = new AppUser
         {
-            UserName = dto.Username,
-            Email = dto.Email
+        FirstName = dto.FirstName,
+        LastName = dto.LastName,
+        Email = dto.Email,
+        EmailConfirmed = true,
+        UserName = dto.Email // Temporary, admin will assign username later
+            
         };
 
         var result = await _userManager.CreateAsync(user, dto.Password);

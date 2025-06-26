@@ -89,11 +89,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-// ===== ROLE AND ADMIN SEEDING =====
+// ==== SEED ROLES AND DEFAULT ADMIN ====
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     // Seed roles
     string[] roles = { "Admin", "Teacher", "Student", "Parent" };
@@ -105,27 +106,52 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    // Seed a default admin (optional but useful)
-    string adminEmail = "admin@system.com";
-    string adminUsername = "admin";
-    string adminPassword = "Admin@123"; // You can replace this later or hash from env
-
-    var existingAdmin = await userManager.FindByNameAsync(adminUsername);
-    if (existingAdmin == null)
+    // Custom admin seed logic
+    async Task SeedAdminUserAsync(
+        UserManager<AppUser> userManager,
+        RoleManager<IdentityRole> roleManager,
+        ApplicationDbContext context)
     {
-        var adminUser = new AppUser
-        {
-            UserName = adminUsername,
-            Email = adminEmail,
-            EmailConfirmed = true
-        };
+        string adminEmail = "admin@school.com";
+        string password = "Admin@123";
 
-        var result = await userManager.CreateAsync(adminUser, adminPassword);
-        if (result.Succeeded)
+        var existingUser = await userManager.FindByEmailAsync(adminEmail);
+        if (existingUser == null)
         {
-            await userManager.AddToRoleAsync(adminUser, "Admin");
+            var adminUser = new AppUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                FirstName = "System",
+                LastName = "Admin",
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(adminUser, password);
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+
+                var adminEntity = new Admin
+                {
+                    AdminId = Guid.NewGuid().ToString(),
+                    UserId = adminUser.Id,
+                    Department = "System"
+                };
+
+                context.Admins.Add(adminEntity);
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                Console.WriteLine("Failed to seed admin user:");
+                foreach (var error in result.Errors)
+                    Console.WriteLine($" - {error.Description}");
+            }
         }
     }
+
+    await SeedAdminUserAsync(userManager, roleManager, dbContext);
 }
 
 // Middlewares
@@ -136,8 +162,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

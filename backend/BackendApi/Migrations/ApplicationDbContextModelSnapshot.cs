@@ -22,6 +22,26 @@ namespace BackendApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BackendApi.Models.Admin", b =>
+                {
+                    b.Property<string>("AdminId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AdminId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("BackendApi.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -40,6 +60,14 @@ namespace BackendApi.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -218,6 +246,17 @@ namespace BackendApi.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BackendApi.Models.Admin", b =>
+                {
+                    b.HasOne("BackendApi.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

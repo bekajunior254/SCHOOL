@@ -4,7 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Register() {
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: ""
+  });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,11 +33,20 @@ export default function Register() {
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Register</h2>
 
-        <label>Username:</label>
+        <label>First Name:</label>
         <input
           type="text"
-          name="username"
-          value={form.username}
+          name="firstName"
+          value={form.firstName}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Last Name:</label>
+        <input
+          type="text"
+          name="lastName"
+          value={form.lastName}
           onChange={handleChange}
           required
         />

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using BackendApi.Models;
 using BackendApi.DTOs;
 
@@ -20,15 +20,14 @@ namespace BackendApi.Controllers
             _roleManager = roleManager;
         }
 
+        // ✅ Assign Role and Identifier
         [HttpPost("assign-role-identifier")]
         public async Task<IActionResult> AssignRoleAndIdentifier([FromBody] AssignRoleAndIdentifierDto dto)
         {
-            // Validate user
             var user = await _userManager.FindByIdAsync(dto.UserId);
             if (user == null)
                 return NotFound("User not found.");
 
-            // Assign role if not already assigned
             var roles = await _userManager.GetRolesAsync(user);
             if (!roles.Contains(dto.Role))
             {
@@ -38,7 +37,6 @@ namespace BackendApi.Controllers
                 await _userManager.AddToRoleAsync(user, dto.Role);
             }
 
-            // Assign identifier + set as username
             switch (dto.Role)
             {
                 case "Student":
@@ -61,6 +59,31 @@ namespace BackendApi.Controllers
                 return BadRequest(result.Errors);
 
             return Ok("Role and identifier assigned successfully.");
+        }
+
+        //  Fetch users who don't have any role assigned
+        [HttpGet("unassigned-users")]
+        public async Task<IActionResult> GetUnassignedUsers()
+        {
+            var allUsers = _userManager.Users.ToList();
+            var unassignedUsers = new List<object>();
+
+            foreach (var user in allUsers)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles == null || !roles.Any())
+                {
+                    unassignedUsers.Add(new
+                    {
+                        user.Id,
+                        user.FirstName,
+                        user.LastName,
+                        user.Email
+                    });
+                }
+            }
+
+            return Ok(unassignedUsers);
         }
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text;
 using BackendApi.Models;
@@ -26,13 +27,15 @@ namespace BackendApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
+            var normalizedEmail = dto.Email.Trim().ToLower();
+
             var user = new AppUser
             {
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                Email = dto.Email,
+                Email = normalizedEmail,
                 EmailConfirmed = true,
-                UserName = dto.Email // Temporary username; real one is assigned later
+                UserName = normalizedEmail // Temporary username; real one is assigned later
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -52,7 +55,9 @@ namespace BackendApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Username);
+            var normalizedUsername = dto.Username.Trim().ToLower();
+
+            var user = await _userManager.FindByNameAsync(normalizedUsername);
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
                 return Unauthorized("Invalid credentials");
 
@@ -68,11 +73,12 @@ namespace BackendApi.Controllers
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Role, role)
             };
+            
 
             var jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT key not found in configuration.");
             var jwtIssuer = _config["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT issuer not found in configuration.");
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

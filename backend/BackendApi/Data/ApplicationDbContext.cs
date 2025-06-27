@@ -10,7 +10,11 @@ namespace BackendApi.Data
             : base(options)
         {
         }
-      public DbSet<Admin> Admins { get; set; } 
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+       public DbSet<Student> Students { get; set; }
+
+
         // Add your DbSets here (Students, Teachers, etc.)
     }
 }

@@ -1,41 +1,82 @@
 .assign-role-container {
-  max-width: 450px;
-  margin: 50px auto;
-  background: #f0f0f0;
-  padding: 20px 30px;
-  border-radius: 8px;
+  max-width: 500px;
+  margin: 60px auto;
+  background: #f9f9f9;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.assign-role-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.assign-role-form {
+  display: flex;
+  flex-direction: column;
 }
 
 .assign-role-form label {
-  display: block;
   margin-top: 15px;
+  font-weight: 600;
+  color: #333;
 }
 
 .assign-role-form input,
 .assign-role-form select {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 4px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  border-radius: 6px;
   border: 1px solid #ccc;
+  font-size: 15px;
+  transition: border 0.3s ease;
+}
+
+.assign-role-form input:focus,
+.assign-role-form select:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 .assign-role-form button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 10px;
+  margin-top: 25px;
+  padding: 12px;
   background: #007bff;
   color: white;
+  font-size: 16px;
+  font-weight: 600;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .assign-role-form button:hover {
   background: #0056b3;
 }
 
-.status-message {
+.success-message {
   margin-top: 15px;
-  font-weight: bold;
+  color: green;
+  font-weight: 600;
+  text-align: center;
+}
+
+.error-message {
+  margin-top: 15px;
+  color: red;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Optional: Make it responsive */
+@media (max-width: 600px) {
+  .assign-role-container {
+    margin: 30px 15px;
+    padding: 20px;
+  }
 }

@@ -1,23 +1,30 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using BackendApi.Models;
 using BackendApi.DTOs;
+using BackendApi.Data;
 
 namespace BackendApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")] // Uncomment this in production
     public class AdminController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
-        public AdminController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminController(
+            UserManager<AppUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         // ✅ Assign Role and Identifier
@@ -37,6 +44,7 @@ namespace BackendApi.Controllers
                 await _userManager.AddToRoleAsync(user, dto.Role);
             }
 
+            // Set the identifier + UserName
             switch (dto.Role)
             {
                 case "Student":
@@ -61,7 +69,7 @@ namespace BackendApi.Controllers
             return Ok("Role and identifier assigned successfully.");
         }
 
-        //  Fetch users who don't have any role assigned
+        // ✅ Get users with no role
         [HttpGet("unassigned-users")]
         public async Task<IActionResult> GetUnassignedUsers()
         {
@@ -84,6 +92,22 @@ namespace BackendApi.Controllers
             }
 
             return Ok(unassignedUsers);
+        }
+
+        // ✅ New: Get Admin Dashboard Stats
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetDashboardStats()
+        {
+            var studentCount = await _context.Students.CountAsync();
+            var teacherCount = await _context.Teachers.CountAsync();
+          //  var courseCount = await _context.Courses.CountAsync();
+
+            return Ok(new
+            {
+                totalStudents = studentCount,
+                totalTeachers = teacherCount,
+               // totalCourses = courseCount
+            });
         }
     }
 }

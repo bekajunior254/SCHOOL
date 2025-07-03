@@ -81,14 +81,14 @@ body, html, #root {
   margin-top: -0.3rem;
   margin-bottom: 1rem;
   font-size: 0.9rem;
-  color: #007bff;
+  color:#0ea5e9;
   text-decoration: none;
 }
 
 .login-form button {
   width: 100%;
   padding: 0.6rem;
-  background-color: #007bff;
+  background-color: #0ea5e9;
   border: none;
   color: white;
   font-weight: bold;
@@ -97,7 +97,7 @@ body, html, #root {
 }
 
 .login-form button:hover {
-  background-color: #0056b3;
+  background-color: #0ea5e9;
 }
 
 .error {

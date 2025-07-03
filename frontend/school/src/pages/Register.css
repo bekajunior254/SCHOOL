@@ -53,7 +53,7 @@ body, html, #root {
 .register-form button {
   width: 100%;
   padding: 0.6rem;
-  background-color: #007bff;
+  background-color: #0ea5e9;
   color: white;
   border: none;
   font-weight: bold;
@@ -62,7 +62,8 @@ body, html, #root {
 }
 
 .register-form button:hover {
-  background-color: #0056b3;
+  background-color: #0ea5e9;
+  
 }
 
 .register-form p {
@@ -72,7 +73,7 @@ body, html, #root {
 }
 
 .register-form a {
-  color: #007bff;
+  color: #0ea5e9;
   text-decoration: none;
   font-weight: 500;
 }

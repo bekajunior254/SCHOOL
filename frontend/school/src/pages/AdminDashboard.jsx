@@ -44,12 +44,14 @@ export default function AdminDashboard() {
         <h2>Admin Panel</h2>
         <nav>
           <button onClick={() => navigate("/admin/manage-users")}>Manage Users</button>
-          <button onClick={() => navigate("/admin/manage-students", { state: { refreshStats } })}>
+          <button onClick={() => navigate("/admin/manage-students")}>
             Manage Students
           </button>
-          <button onClick={() => navigate("/admin/manage-teachers", { state: { refreshStats } })}>
+
+          <button onClick={() => navigate("/admin/manage-teachers")}>Manage Teachers</button>
+          {/* <button onClick={() => navigate("/admin/manage-teachers", { state: { refreshStats } })}>
             Manage Teachers
-          </button>
+          </button> */}
           <button onClick={() => navigate("/admin/assign-role")}>Assign Role & Identifier</button>
           <button onClick={() => navigate("/admin/create-course")}>Create Course</button>
           <button onClick={() => navigate("/admin/enroll-students")}>Enroll Students to Courses</button>

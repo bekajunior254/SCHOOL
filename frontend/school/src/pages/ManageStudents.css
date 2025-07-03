@@ -1,0 +1,35 @@
+.manage-students {
+  padding: 20px;
+}
+
+.manage-students form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.manage-students input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.manage-students button {
+  padding: 8px 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.manage-students table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.manage-students th,
+.manage-students td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}

@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./ManageStudents.css";
 
 export default function ManageStudents() {
   const [students, setStudents] = useState([]);
-  const [form, setForm] = useState({ userId: "", program: "", year: "" });
-  const [editingId, setEditingId] = useState(null);
-  const token = localStorage.getItem("token");
+  const [form, setForm] = useState({ firstName: "", lastName: "", program: "", year: "" });
+  const [editId, setEditId] = useState(null);
+  const location = useLocation();
+  const refreshStats = location.state?.refreshStats;
 
   const fetchStudents = async () => {
     try {
+      const token = localStorage.getItem("token");
       const res = await axios.get("http://localhost:5000/api/student", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStudents(res.data);
     } catch (err) {
-      console.error("Error fetching students", err);
+      console.error("Failed to fetch students", err);
     }
   };
 
@@ -25,49 +28,70 @@ export default function ManageStudents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+
     try {
-      if (editingId) {
-        await axios.put(`http://localhost:5000/api/student/${editingId}`, form, {
+      if (editId) {
+        // Update existing student
+        await axios.put(`http://localhost:5000/api/student/${editId}`, form, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
+        // Create new student
         await axios.post("http://localhost:5000/api/student", form, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
-      setForm({ userId: "", program: "", year: "" });
-      setEditingId(null);
+
+      setForm({ firstName: "", lastName: "", program: "", year: "" });
+      setEditId(null);
       fetchStudents();
+      refreshStats?.();
     } catch (err) {
-      console.error("Error submitting form", err);
+      console.error("Failed to save student", err);
     }
   };
 
   const handleEdit = (student) => {
-    setForm({ userId: student.userId, program: student.program, year: student.year });
-    setEditingId(student.studentId);
+    setForm({
+      firstName: student.firstName,
+      lastName: student.lastName,
+      program: student.program,
+      year: student.year,
+    });
+    setEditId(student.studentId);
   };
 
   const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
     try {
       await axios.delete(`http://localhost:5000/api/student/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchStudents();
+      refreshStats?.();
     } catch (err) {
-      console.error("Error deleting student", err);
+      console.error("Failed to delete student", err);
     }
   };
 
   return (
     <div className="manage-students">
       <h2>Manage Students</h2>
-      <form onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit} className="student-form">
         <input
           type="text"
-          placeholder="User ID"
-          value={form.userId}
-          onChange={(e) => setForm({ ...form, userId: e.target.value })}
+          placeholder="First Name"
+          value={form.firstName}
+          onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={form.lastName}
+          onChange={(e) => setForm({ ...form, lastName: e.target.value })}
           required
         />
         <input
@@ -84,14 +108,13 @@ export default function ManageStudents() {
           onChange={(e) => setForm({ ...form, year: e.target.value })}
           required
         />
-        <button type="submit">{editingId ? "Update" : "Add"} Student</button>
+        <button type="submit">{editId ? "Update" : "Add"} Student</button>
       </form>
 
-      <table>
+      <table className="student-table">
         <thead>
           <tr>
-            <th>Student ID</th>
-            <th>User ID</th>
+            <th>Name</th>
             <th>Program</th>
             <th>Year</th>
             <th>Actions</th>
@@ -100,13 +123,12 @@ export default function ManageStudents() {
         <tbody>
           {students.map((s) => (
             <tr key={s.studentId}>
-              <td>{s.studentId}</td>
-              <td>{s.userId}</td>
+              <td>{s.firstName} {s.lastName}</td>
               <td>{s.program}</td>
               <td>{s.year}</td>
               <td>
                 <button onClick={() => handleEdit(s)}>Edit</button>
-                <button onClick={() => handleDelete(s.studentId)}>Delete</button>
+                <button onClick={() => handleDelete(s.studentId)} className="delete-btn">Delete</button>
               </td>
             </tr>
           ))}

@@ -111,7 +111,7 @@ export default function ManageStudents() {
         <button type="submit">{editId ? "Update" : "Add"} Student</button>
       </form>
 
-      <table className="student-table">
+      <table className="students-table">
         <thead>
           <tr>
             <th>Name</th>

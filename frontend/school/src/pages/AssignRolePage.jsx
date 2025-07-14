@@ -14,11 +14,14 @@ export default function AssignRoleForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Fetch unassigned users
+  // ✅ Fetch unassigned users (with Authorization header)
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/unassigned-users");
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:5000/api/admin/unassigned-users", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setUsers(res.data);
       } catch (err) {
         console.error("Could not fetch users", err);
@@ -31,6 +34,7 @@ export default function AssignRoleForm() {
     fetchUsers();
   }, []);
 
+  // Handle input changes
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
@@ -38,6 +42,7 @@ export default function AssignRoleForm() {
     }));
   };
 
+  // ✅ Submit form to assign role + identifier (with token)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -49,13 +54,18 @@ export default function AssignRoleForm() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/admin/assign-role-identifier", form);
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5000/api/admin/assign-role-identifier", form, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
       setMessage("✅ Role and identifier assigned successfully!");
       setForm({ userId: "", role: "Student", identifier: "" });
-      // Optionally refresh user list
+
+      // Remove user from list after assignment
       setUsers((prev) => prev.filter((u) => u.id !== form.userId));
     } catch (err) {
-      console.error(err);
+      console.error("Assign role error", err);
       setError("❌ Failed to assign role. Check the identifier or try again.");
     }
   };
@@ -98,6 +108,7 @@ export default function AssignRoleForm() {
           />
 
           <button type="submit">Assign</button>
+
           {message && <p className="success-message">{message}</p>}
           {error && <p className="error-message">{error}</p>}
         </form>

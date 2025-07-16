@@ -1,0 +1,92 @@
+.manage-teachers-container {
+  padding: 40px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  color: #1e293b;
+}
+
+.manage-teachers-container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.teacher-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.teacher-form input {
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  width: 200px;
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+.teacher-form button {
+  padding: 10px 20px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.teacher-form button:hover {
+  background-color: #1d4ed8;
+}
+
+.manage-teachers-container ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.manage-teachers-container li {
+  padding: 15px 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+.teacher-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.teacher-actions button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.teacher-actions button:first-child {
+  background-color: #0ea5e9;
+  color: white;
+}
+
+.teacher-actions button:first-child:hover {
+  background-color: #0284c7;
+}
+
+.teacher-actions .delete-btn {
+  background-color: #ef4444;
+  color: white;
+}
+
+.teacher-actions .delete-btn:hover {
+  background-color: #dc2626;
+}

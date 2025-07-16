@@ -48,6 +48,9 @@ export default function AdminDashboard() {
             Manage Students
           </button>
 
+          <button onClick={() => navigate("/admin/manage-courses")}>
+            Manage Courses
+          </button>
           <button onClick={() => navigate("/admin/manage-teachers")}>Manage Teachers</button>
           {/* <button onClick={() => navigate("/admin/manage-teachers", { state: { refreshStats } })}>
             Manage Teachers
@@ -56,6 +59,7 @@ export default function AdminDashboard() {
           <button onClick={() => navigate("/admin/create-course")}>Create Course</button>
           <button onClick={() => navigate("/admin/enroll-students")}>Enroll Students to Courses</button>
           <button onClick={() => navigate("/admin/assign-teachers")}>Assign Courses to Teachers</button>
+           
         </nav>
         <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </aside>

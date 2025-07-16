@@ -55,7 +55,7 @@ namespace BackendApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var normalizedUsername = dto.Username.Trim().ToLower();
+            var normalizedUsername = dto.Username.Trim();
 
             var user = await _userManager.FindByNameAsync(normalizedUsername);
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))

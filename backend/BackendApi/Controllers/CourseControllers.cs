@@ -80,4 +80,23 @@ public class CoursesController : ControllerBase
 
         return Ok(new { message = "Course deleted successfully" });
     }
+    [HttpPost("{courseId}/assign-teacher")]
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> AssignTeacherToCourse(Guid courseId, [FromBody] AssignTeacherDto dto)
+{
+    var course = await _context.Courses.FindAsync(courseId);
+    if (course == null)
+        return NotFound("Course not found");
+
+    var teacher = await _context.Users.FirstOrDefaultAsync(u => u.TeacherID == dto.TeacherId);
+    if (teacher == null)
+        return NotFound("Teacher not found");
+
+    course.TeacherId = teacher.Id;
+
+    await _context.SaveChangesAsync();
+
+    return Ok("Teacher assigned to course successfully.");
+}
+
 }

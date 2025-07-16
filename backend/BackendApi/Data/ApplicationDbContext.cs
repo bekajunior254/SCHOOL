@@ -10,15 +10,25 @@ namespace BackendApi.Data
             : base(options)
         {
         }
+
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
-      // public DbSet<Attendance> Attendance { get; set; }
 
+        // Optional: if you're using attendance or grades later
+        // public DbSet<Attendance> Attendance { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-
-        // Add your DbSets here (Students, Teachers, etc.)
+            // Setup Course–Teacher relationship
+            builder.Entity<Course>()
+                .HasOne(c => c.Teacher)
+                .WithMany() // No navigation from AppUser to courses
+                .HasForeignKey(c => c.TeacherId)
+                .OnDelete(DeleteBehavior.SetNull); // if teacher is deleted, don't delete course
+        }
     }
 }

@@ -6,6 +6,7 @@ import AssignRolePage from "./pages/AssignRolePage.jsx";
 import ManageStudents from "./pages/ManageStudents.jsx";
 import ManageCourses from "./pages/ManageCourses";
 import ManageTeachers from "./pages/ManageTeachers.jsx";
+import AssignTeacherPage from "./pages/AssignTeacherPage.jsx";
 function App() {
   return (
     <Router>
@@ -17,6 +18,7 @@ function App() {
        <Route path="/admin/manage-students" element={<ManageStudents />} />
        <Route path="/admin/manage-courses" element={<ManageCourses />} />
         <Route path="/admin/manage-teachers" element={<ManageTeachers />} />
+        <Route path="/admin/assign-teacher" element={<AssignTeacherPage />} />
         {/* Add other routes as needed */}
 
       </Routes>

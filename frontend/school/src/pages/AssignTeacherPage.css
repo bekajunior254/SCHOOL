@@ -1,0 +1,42 @@
+.assign-teacher-page {
+  padding: 40px;
+  max-width: 600px;
+  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
+  color: #1e293b;
+}
+
+.assign-teacher-page h2 {
+  font-size: 26px;
+  margin-bottom: 25px;
+}
+
+.assign-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.assign-form select,
+.assign-form button {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #cbd5e1;
+}
+
+.assign-form button {
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.assign-form button:hover {
+  background-color: #1d4ed8;
+}
+
+.message {
+  margin-top: 15px;
+  font-weight: bold;
+}

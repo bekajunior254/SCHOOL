@@ -14,7 +14,7 @@ export default function AssignRoleForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch unassigned users (with Authorization header)
+  // Fetch unassigned users (with Authorization header)
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -42,7 +42,7 @@ export default function AssignRoleForm() {
     }));
   };
 
-  // ✅ Submit form to assign role + identifier (with token)
+  //  Submit form to assign role + identifier (with token)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -59,14 +59,14 @@ export default function AssignRoleForm() {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      setMessage("✅ Role and identifier assigned successfully!");
+      setMessage(" Role and identifier assigned successfully!");
       setForm({ userId: "", role: "Student", identifier: "" });
 
       // Remove user from list after assignment
       setUsers((prev) => prev.filter((u) => u.id !== form.userId));
     } catch (err) {
       console.error("Assign role error", err);
-      setError("❌ Failed to assign role. Check the identifier or try again.");
+      setError(" Failed to assign role. Check the identifier or try again.");
     }
   };
 

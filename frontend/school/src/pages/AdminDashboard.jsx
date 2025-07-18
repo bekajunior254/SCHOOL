@@ -58,7 +58,7 @@ export default function AdminDashboard() {
           <button onClick={() => navigate("/admin/assign-role")}>Assign Role & Identifier</button>
           <button onClick={() => navigate("/admin/create-course")}>Create Course</button>
           <button onClick={() => navigate("/admin/enroll-students")}>Enroll Students to Courses</button>
-          <button onClick={() => navigate("/admin/assign-teachers")}>Assign Courses to Teachers</button>
+          <button onClick={() => navigate("/admin/assign-teacher")}>Assign Courses to Teachers</button>
            
         </nav>
         <button className="logout-btn" onClick={handleLogout}>Logout</button>

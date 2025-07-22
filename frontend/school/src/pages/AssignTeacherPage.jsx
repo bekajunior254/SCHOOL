@@ -34,7 +34,7 @@ useEffect(() => {
   const fetchTeachers = async () => {
     try {
       const token = localStorage.getItem("token");
-      const teacherRes = await axios.get("http://localhost:5000/api/teachers", {
+      const teacherRes = await axios.get("http://localhost:5000/api/teacher", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTeachers(teacherRes.data);

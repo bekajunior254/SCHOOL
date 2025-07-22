@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-//import axios from "axios";
+import axios from "axios";
 import "./AssignTeacherPage.css";
 
 export default function AssignTeacherPage() {
@@ -10,27 +10,43 @@ export default function AssignTeacherPage() {
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [courseRes, teacherRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/courses", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("http://localhost:5000/api/admin/teachers", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-        setCourses(courseRes.data);
-        setTeachers(teacherRes.data);
-      } catch (err) {
-        console.error("Failed to fetch data", err);
-      }
-    };
+  
+useEffect(() => {
+  const fetchCourses = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const courseRes = await axios.get("http://localhost:5000/api/courses", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCourses(courseRes.data);
+    } catch (err) {
+      console.error("Failed to fetch courses", err);
+      // Optional: Set courses-specific error state
+      // setCoursesError("Failed to load courses");
+    }
+  };
 
-    fetchData();
-  }, []);
+  fetchCourses();
+}, []);
 
+// Fetch teachers independently
+useEffect(() => {
+  const fetchTeachers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const teacherRes = await axios.get("http://localhost:5000/api/teachers", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTeachers(teacherRes.data);
+    } catch (err) {
+      console.error("Failed to fetch teachers", err);
+      // Optional: Set teachers-specific error state
+      // setTeachersError("Failed to load teachers");
+    }
+  };
+
+  fetchTeachers();
+}, []);
   const handleAssign = async (e) => {
     e.preventDefault();
     try {

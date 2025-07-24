@@ -92,7 +92,7 @@ public async Task<IActionResult> AssignTeacherToCourse(Guid courseId, [FromBody]
     if (teacher == null)
         return NotFound("Teacher not found");
 
-    course.TeacherId = teacher.Id;
+    course.UserId = teacher.Id;
 
     await _context.SaveChangesAsync();
 

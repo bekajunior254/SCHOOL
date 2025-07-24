@@ -16,19 +16,37 @@ namespace BackendApi.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
 
-        // Optional: if you're using attendance or grades later
-        // public DbSet<Attendance> Attendance { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
+            // Configure Teacher-AppUser relationship
+            builder.Entity<Teacher>()
+                .HasOne(t => t.User)
+                .WithMany() // AppUser can have multiple related entities, but no navigation back
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Admin-AppUser relationship (if you have similar issue with Admin)
+            builder.Entity<Admin>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Student-AppUser relationship (if you have similar issue with Student)
+            builder.Entity<Student>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Setup Course–Teacher relationship
             builder.Entity<Course>()
                 .HasOne(c => c.Teacher)
-                .WithMany() // No navigation from AppUser to courses
-                .HasForeignKey(c => c.TeacherId)
-                .OnDelete(DeleteBehavior.SetNull); // if teacher is deleted, don't delete course
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

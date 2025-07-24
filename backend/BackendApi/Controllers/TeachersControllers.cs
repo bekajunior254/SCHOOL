@@ -83,5 +83,24 @@ namespace BackendApi.Controllers
 
             return Ok(teacher);
         }
-    }
-}
+[HttpGet("debug")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DebugTeachers()
+        {
+            try
+            {
+                // Just get the raw teachers
+                var teachers = await _context.Teachers.ToListAsync();
+
+                return Ok(new {
+                    Count = teachers.Count,
+                    Teachers = teachers,
+                    Message = teachers.Count == 0 ? "No teachers found" : $"Found {teachers.Count} teachers"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Error = ex.Message });
+            }
+        }
+    } }
